@@ -1,6 +1,13 @@
 {
+    "autoload": {
+        "psr-0": {"BadgeBatch\\": "src/"}
+    },
     "require": {
         "silex/silex": "~1.2",
-        "symfony/twig-bridge": "~2.6"
+        "symfony/twig-bridge": "~2.6",
+        "symfony/finder": "~2.6"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "~2.6"
     }
 }
