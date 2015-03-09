@@ -8,6 +8,18 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-
+<table class="table">
+    {% for row in matrix %}
+        <tr>
+            {% for item in row %}
+                {% if loop.first or loop.parent.loop.first %}
+                    <th>{{ item }}</th>
+                {% else %}
+                    <td>{{ item }}</td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
 </body>
 </html>

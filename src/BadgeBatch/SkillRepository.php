@@ -28,6 +28,63 @@ class SkillRepository
     }
 
     /**
+     * @return string[]
+     */
+    public function findPersonNames()
+    {
+        $personNames = array_keys($this->findAll());
+        sort($personNames);
+
+        return $personNames;
+    }
+
+
+    /**
+     * @return string[]
+     *
+     * warning: this code is write-only
+     */
+    public function findSkillNames()
+    {
+        $skillNames = array_unique(
+            array_map(
+                function (Skill $skill) {
+                    return $skill->name;
+                },
+                array_reduce(
+                    $this->findAll(),
+                    function ($carry, $item) {
+                        return array_merge($carry, $item);
+                    },
+                    []
+                )
+            )
+        );
+        sort($skillNames);
+
+        return $skillNames;
+    }
+
+    /**
+     * @param $person
+     * @param $skillName
+     *
+     * @return string
+     */
+    public function findLevelByPersonAndSkillName($person, $skillName)
+    {
+        /** @var Skill[] $skills */
+        $skills = $this->findAll()[$person];
+        foreach ($skills as $skill) {
+            if ($skill->name === $skillName) {
+                return $skill->level;
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * @return array
      */
     public function findAll()
@@ -46,7 +103,7 @@ class SkillRepository
         foreach ($files as $txtFile) {
             $name = explode('.', $txtFile->getFilename(), 2)[0];
 
-            $ret[ $name ] = $this->skillFileParser->parse($txtFile->getContents());
+            $ret[$name] = $this->skillFileParser->parse($txtFile->getContents());
         }
 
         return $ret;
