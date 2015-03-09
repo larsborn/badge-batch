@@ -33,7 +33,7 @@ class SkillRepository
     public function findPersonNames()
     {
         $personNames = array_keys($this->findAll());
-        sort($personNames);
+        natcasesort($personNames);
 
         return $personNames;
     }
@@ -60,7 +60,7 @@ class SkillRepository
                 )
             )
         );
-        sort($skillNames);
+        natcasesort($skillNames);
 
         return $skillNames;
     }
