@@ -2,6 +2,8 @@
 
 namespace BadgeBatch;
 
+use Symfony\Component\Yaml\Parser;
+
 class SkillFileParser
 {
     /**
@@ -11,19 +13,20 @@ class SkillFileParser
      */
     public function parse($content)
     {
+        $parser = new Parser();
         $skills = [];
-        foreach (explode("\n", $content) as $line) {
-            $line = trim($line);
-            if (! $line) {
+
+        // todo might throw Symfony\Component\Yaml\Exception\ParseException
+        //      do we want to catch this here or handle further up
+        $data = $parser->parse($content);
+
+        foreach ($data as $skill => $rank) {
+            // todo check for allowed values
+            if (! is_string($rank)) {
                 continue;
             }
 
-            $exp = array_filter(array_map('trim', explode(':', $line, 2)));
-            if (count($exp) != 2) {
-                continue;
-            }
-
-            $skills[] = new Skill($exp[0], $exp[1]);
+            $skills[] = new Skill($skill, $rank);
         }
 
         return $skills;
