@@ -26,10 +26,6 @@ $app['skill_matrix'] = function () use ($app) {
 $app->get(
     '/',
     function () use ($app) {
-
-        /** @var \BadgeBatch\SkillRepository $skillRepository */
-        $skillRepository = $app['skill_repository'];
-
         return $app['twig']->render(
             'index.html.twig',
             ['matrix' => $app['skill_matrix']->get()]
