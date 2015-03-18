@@ -3,6 +3,7 @@
 namespace BadgeBatch;
 
 use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 class SkillFileParser
 {
@@ -16,12 +17,13 @@ class SkillFileParser
         $parser = new Parser();
         $skills = [];
 
-        // todo might throw Symfony\Component\Yaml\Exception\ParseException
-        //      do we want to catch this here or handle further up
-        $data = $parser->parse($content);
+        try {
+            $data = $parser->parse($content);
+        } catch (ParseException $e) {
+            return [];
+        }
 
         foreach ($data as $skill => $rank) {
-            // todo check for allowed values
             if (! is_string($rank)) {
                 continue;
             }
