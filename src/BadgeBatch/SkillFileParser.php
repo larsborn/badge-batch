@@ -2,6 +2,9 @@
 
 namespace BadgeBatch;
 
+use Symfony\Component\Yaml\Parser;
+use Symfony\Component\Yaml\Exception\ParseException;
+
 class SkillFileParser
 {
     /**
@@ -11,19 +14,21 @@ class SkillFileParser
      */
     public function parse($content)
     {
+        $parser = new Parser();
         $skills = [];
-        foreach (explode("\n", $content) as $line) {
-            $line = trim($line);
-            if (! $line) {
+
+        try {
+            $data = $parser->parse($content);
+        } catch (ParseException $e) {
+            return [];
+        }
+
+        foreach ($data as $skill => $rank) {
+            if (! is_string($rank)) {
                 continue;
             }
 
-            $exp = array_filter(array_map('trim', explode(':', $line, 2)));
-            if (count($exp) != 2) {
-                continue;
-            }
-
-            $skills[] = new Skill($exp[0], $exp[1]);
+            $skills[] = new Skill($skill, $rank);
         }
 
         return $skills;
